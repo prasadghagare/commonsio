@@ -6,8 +6,8 @@ import (
 
 //FileSysOp enhances the File object from stdlib
 type FileSysOp interface {
-	//open(path string) (FileInfo, error)
 	ListFiles(FileFilter) ([]string, error)
+	ConcurrentListFiles(FileFilter)([]string, error)
 	IsDir() bool
 }
 

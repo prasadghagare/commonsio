@@ -9,7 +9,8 @@ import (
 
 func TestAgeFilter(t *testing.T){
 	t.Parallel()
-	mainDir, err := ioutil.TempDir("./resources","mainDir")
+	resourceDir := "./resources"
+	mainDir, err := ioutil.TempDir(resourceDir,"mainDir")
 	dir1, err := ioutil.TempDir(mainDir,"Dir1")
 	dir2, err := ioutil.TempDir(mainDir,"Dir2")
 	if err != nil {
@@ -32,18 +33,18 @@ func TestAgeFilter(t *testing.T){
 			100,
 			[]string {file1Dir1.Name(),file2Dir2.Name()},
 		},
-/*		{"files not older than given duration should not be listed",
+		{"files not older than given duration should not be listed",
 			10000,
 			1,
 			[]string{},
-		},*/
+		},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			aFf := NewAgeFileFilter(time.Microsecond, tc.durationMicroSec)
 			time.Sleep(time.Duration(tc.waitMicroSec))
-			paths, _ := rfso.ListFiles(aFf)
+			paths, _ := rfso.ConcurrentListFiles(aFf)
 			if len(tc.expected) == 0{
 				if len(paths) != 0 {
 					t.Fatalf("paths has %s",paths[0])
@@ -62,7 +63,8 @@ func TestAgeFilter(t *testing.T){
 
 func TestNameFilter(t *testing.T){
 	t.Parallel()
-	mainDir, err := ioutil.TempDir("./resources","mainDir")
+	resourceDir := "./resources"
+	mainDir, err := ioutil.TempDir(resourceDir,"mainDir")
 	dir1, err := ioutil.TempDir(mainDir,"Dir1")
 	dir2, err := ioutil.TempDir(mainDir,"Dir2")
 	if err != nil {
@@ -96,7 +98,7 @@ func TestNameFilter(t *testing.T){
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			aFf := NewNameFileFilter(tc.fileName)
-			paths, _ := rfso.ListFiles(aFf)
+			paths, _ := rfso.ConcurrentListFiles(aFf)
 			if len(tc.expected) == 0{
 				if len(paths) != 0 {
 					t.Fatalf("paths has %s",paths[0])
@@ -109,9 +111,3 @@ func TestNameFilter(t *testing.T){
 		})
 	}
 }
-
-/*func TestErrConditionFilter(t *testing.T){
-	t.Parallel()
-	mainDir, err := ioutil.TempDir("./resources","mainDir")
-
-}*/

@@ -1,37 +1,21 @@
-## Welcome to GitHub Pages
+# commonsio in golang for common file system operation
 
-You can use the [editor on GitHub](https://github.com/prasadghagare/commonsio/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+## context
+For common io, file ops, and housekeeping jobs many programming languages have libraries besides their std lib which help reduce verbosity and cognitive load for devs.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Example : java has one from ASF, which identifies few common io and file utilities as follows:
+1. FileFilters : filtering files in a directory based on different criteria such as file age, file size, name matching etc.
+2. IOUtils : reducing verbosity of the code that reads, writes, and copies files
 
-### Markdown
+Here, we will attempt to create similar library for go.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Decision
+While go has excellent std lib support for most of these operations, idea is to find and implement those which are still verbose or missing.
 
-```markdown
-Syntax highlighted code block
+In the first pass of this attempt, focus is on FileFilters utility.
 
-# Header 1
-## Header 2
-### Header 3
+## Status
+Accepted.
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/prasadghagare/commonsio/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+## Consequences
+Implementation in progress.

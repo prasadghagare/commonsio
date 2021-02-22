@@ -121,9 +121,9 @@ func (f realFile) ConcurrentListFiles(fF FileFilter) (matchedFiles[] string, err
 		return nil, errListingRootDir
 	}
 	cReadDirs := feedDirs(dirsInRoot)
-	numOfCpu := runtime.NumCPU()
-	chans := make([]<-chan string, numOfCpu)
-	for i:=0; i < numOfCpu ;i++ {
+	numOfCPU := runtime.NumCPU()
+	chans := make([]<-chan string, numOfCPU)
+	for i:=0; i < numOfCPU ;i++ {
 		chans[i] = singleDirListFiles(cReadDirs,fF)
 	}
 	for n := range merge(chans) {

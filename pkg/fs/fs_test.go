@@ -2,7 +2,6 @@ package fs
 
 import (
 	"io/ioutil"
-	"log"
 	"testing"
 	"time"
 )

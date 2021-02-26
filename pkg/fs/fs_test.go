@@ -2,25 +2,23 @@ package fs
 
 import (
 	"io/ioutil"
-	"os"
+	"log"
 	"testing"
 	"time"
 )
 
 func TestAgeFilter(t *testing.T){
-	t.Parallel()
-	resourceDir := "./resources"
-	mainDir, err := ioutil.TempDir(resourceDir,"mainDir")
-	dir1, err := ioutil.TempDir(mainDir,"Dir1")
-	dir2, err := ioutil.TempDir(mainDir,"Dir2")
+	tmpDir := t.TempDir()
+	dir1, err := ioutil.TempDir(tmpDir,"Dir1")
+	dir2, err := ioutil.TempDir(tmpDir,"Dir2")
 	if err != nil {
 		t.Error("could not create the directory",err)
 	}
 	file1Dir1, _ := ioutil.TempFile(dir1,"Dir1Files_1")
 	file2Dir2, _ := ioutil.TempFile(dir2,"Dir2Files_2")
 
-	defer os.RemoveAll(mainDir)
-	rfso := NewFileSysOp(mainDir)
+
+	rfso := NewFileSysOp(tmpDir)
 
 	cases := [] struct {
 		name string
@@ -62,19 +60,17 @@ func TestAgeFilter(t *testing.T){
 }
 
 func TestNameFilter(t *testing.T){
-	t.Parallel()
-	resourceDir := "./resources"
-	mainDir, err := ioutil.TempDir(resourceDir,"mainDir")
-	dir1, err := ioutil.TempDir(mainDir,"Dir1")
-	dir2, err := ioutil.TempDir(mainDir,"Dir2")
+	tmpDir := t.TempDir()
+	dir1, err := ioutil.TempDir(tmpDir,"Dir3")
+	dir2, err := ioutil.TempDir(tmpDir,"Dir4")
 	if err != nil {
 		t.Error("could not create the directory",err)
 	}
 	file1Dir1, _ := ioutil.TempFile(dir1,"Dir1Files_1")
 	file2Dir2, _ := ioutil.TempFile(dir2,"Dir2Files_2")
 
-	defer os.RemoveAll(mainDir)
-	rfso := NewFileSysOp(mainDir)
+	rfso := NewFileSysOp(tmpDir)
+
 
 	cases := [] struct {
 		name string

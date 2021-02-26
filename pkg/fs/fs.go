@@ -9,6 +9,7 @@ type FileSysOp interface {
 	ListFiles(FileFilter) ([]string, error)
 	ConcurrentListFiles(FileFilter)([]string, error)
 	IsDir() bool
+	Close() error
 }
 
 //FileFilter : anything that implement accept

@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"sync"
+	"io/fs"
 )
 
 //NewFileSysOp gives RealFileSysOp struct instance
@@ -89,6 +90,34 @@ func singleDirListFiles(in <-chan string, fF FileFilter) <-chan string {
 	return channelMatchedFileOut
 	}
 
+	func singleDirListFilesWalkDir(in <-chan string, fF FileFilter) <-chan string {
+		channelMatchedFileOut := make(chan string)
+		err := errors.New("some error")
+		go func() {
+			for  n := range in {
+				err = filepath.WalkDir(n,
+					func(path string, d fs.DirEntry, err error) error {
+						if err != nil {
+							return errors.Wrapf(err, "Could not list for path %q: ", path)
+						}
+						fInfo ,_ := d.Info()
+						if (fF.accept(fInfo)) && ! fInfo.IsDir() {
+							channelMatchedFileOut <- path
+						}
+						return nil
+					})
+				//TODO - improve this error handling
+				//This is a library which should not be logging like this rather should return the error
+				//For clients to handle
+				if err != nil {
+					fmt.Println(err)
+				}
+			}
+			close(channelMatchedFileOut)
+		}()
+		return channelMatchedFileOut
+		}
+
 func merge(cs []<-chan string) <-chan string {
 	var wg sync.WaitGroup
 	out := make(chan string)
@@ -124,7 +153,7 @@ func (f realFile) ConcurrentListFiles(fF FileFilter) (matchedFiles[] string, err
 	numOfCPU := runtime.NumCPU()
 	chans := make([]<-chan string, numOfCPU)
 	for i:=0; i < numOfCPU ;i++ {
-		chans[i] = singleDirListFiles(cReadDirs,fF)
+		chans[i] = singleDirListFilesWalkDir(cReadDirs,fF)
 	}
 	for n := range merge(chans) {
 		matchedFiles = append(matchedFiles,n )
